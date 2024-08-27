@@ -5,18 +5,20 @@ import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { Tooltip } from "react-tooltip";
 import { scaleLinear } from "d3-scale";
 
+import { Topology } from "topojson-specification";
 import type { Geography as GeographyType, Metadata, MetaItem } from "./types";
-import { Tooltip as TT, Legend } from "./components";
 
-import brazilTopoJson from "./brazil-topojson.json";
+import { getChildByType } from "./utils/reactHandling";
+import { Tooltip as TT, Legend } from "./components";
 
 import "./index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
 interface TopoHeatmapProps {
-  children?: React.ReactNode[] | React.ReactNode;
   data: Record<string, number>;
+  topojson: Topology;
   metadata?: Metadata;
+  children?: React.ReactNode[] | React.ReactNode;
   colorRange?: [string, string];
   domain?: [number, number];
   onClick?: (geo: GeographyType) => void;
@@ -26,31 +28,18 @@ function TopoHeatmap({
   children = [],
   data,
   metadata,
+  topojson,
   domain,
   colorRange = ["#90caff", "#2998ff"],
 }: TopoHeatmapProps): JSX.Element {
   const componentId = useId().replace(/:/g, "");
-
   const maxValue = Math.max(...Object.values(data));
   const colorScale = scaleLinear<string>()
     .domain(domain || [0, maxValue])
     .range(colorRange);
 
-  const getChild = (type: React.ElementType) => {
-    if (Array.isArray(children)) {
-      return children.find(
-        (child) => React.isValidElement(child) && child.type === type
-      ) as React.ReactNode | null;
-    } else {
-      if (React.isValidElement(children) && children.type === type) {
-        return children;
-      }
-    }
-    return null;
-  };
-
-  const tooltipProps = TT.getTooltipProps(getChild(TT));
-  const legendProps = Legend.getLegendProps(getChild(Legend));
+  const tooltipProps = TT.getTooltipProps(getChildByType(children, TT));
+  const legendProps = Legend.getLegendProps(getChildByType(children, Legend));
 
   const getTooltipContent = (geoId: string): React.ReactNode => {
     if (tooltipProps && metadata && tooltipProps.tooltipContent) {
@@ -107,14 +96,14 @@ function TopoHeatmap({
         }}
         viewBox="0 -100 800 800"
       >
-        <Geographies geography={brazilTopoJson} style={{ flexGrow: 1 }}>
+        <Geographies geography={topojson} style={{ flexGrow: 1 }}>
           {({ geographies }: { geographies: GeographyType[] }) =>
             geographies.map((geo) => {
               const stateValue = data[geo.id] || 0;
               return (
                 <Geography
                   className="react-topojson-heatmap__state"
-                  key={geo.rsmKey}
+                  key={`${componentId}_${geo.id}`}
                   geography={geo}
                   fill={colorScale(stateValue)}
                   id={`geo-${componentId}-${geo.id}`}
@@ -145,5 +134,5 @@ function TopoHeatmap({
 }
 
 export default TopoHeatmap;
-export type { GeographyType, Metadata, MetaItem };
+export type { GeographyType, Metadata, MetaItem, Topology };
 export { Legend, Tooltip } from "./components";

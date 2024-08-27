@@ -1,13 +1,10 @@
 export type Geography = {
   type: string;
   properties: {
-    name: string;
-    uf: string;
-    codigo: number;
-    regiao: string;
+    [key: string]: any;
   };
   id: string;
-  rsmKey: string;
+  arcs: any[];
 };
 
 export type MetaItem = {
@@ -17,4 +14,3 @@ export type MetaItem = {
 export type Metadata = {
   [key: string]: MetaItem;
 };
-
