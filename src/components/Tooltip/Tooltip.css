@@ -1,4 +1,4 @@
-.react-brazil-heatmap__tooltip {
+.react-topojson-heatmap__tooltip {
   width: 100%;
   height: auto;
   display: flex;
@@ -10,7 +10,7 @@
   padding: 10px;
 }
 
-.react-brazil-heatmap__tooltip.bottom::before {
+.react-topojson-heatmap__tooltip.bottom::before {
   content: "";
   position: absolute;
   width: 0;
@@ -21,7 +21,7 @@
   top: -7px;
 }
 
-.react-brazil-heatmap__tooltip.top::before {
+.react-topojson-heatmap__tooltip.top::before {
   content: "";
   position: absolute;
   width: 0;
@@ -32,7 +32,7 @@
   bottom: -7px;
 }
 
-.react-brazil-heatmap__tooltip.right::before {
+.react-topojson-heatmap__tooltip.right::before {
   content: "";
   position: absolute;
   width: 0;
@@ -44,7 +44,7 @@
 }
 
 /* Tooltip arrow right */
-.react-brazil-heatmap__tooltip.left::before {
+.react-topojson-heatmap__tooltip.left::before {
   content: "";
   position: absolute;
   width: 0;

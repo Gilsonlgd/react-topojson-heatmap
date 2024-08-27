@@ -1,4 +1,4 @@
-.react-brazil-heatmap {
+.react-topojson-heatmap {
   position: relative;
   width: 100%;
   height: 100%;
@@ -6,20 +6,20 @@
   flex-grow: 1;
 }
 
-.react-brazil-heatmap__state {
+.react-topojson-heatmap__state {
   outline: none;
   border: none;
   transition: all 0.3s;
 }
 
-.react-brazil-heatmap__state:hover {
+.react-topojson-heatmap__state:hover {
   opacity: 0.8;
 }
 
-.react-brazil-heatmap .w-100 {
+.react-topojson-heatmap .w-100 {
   width: 100%;
 }
 
-.react-brazil-heatmap .h-100 {
+.react-topojson-heatmap .h-100 {
   height: 100%;
 }

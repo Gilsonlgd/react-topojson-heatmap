@@ -23,7 +23,7 @@ function Legend({
     (_, i) => minValue + i * stepSize
   );
   return (
-    <div className={`react-brazil-heatmap__legend`}>
+    <div className={`react-topojson-heatmap__legend`}>
       <div className="content-wrapper">
         <div className="legend-header">{children}</div>
         <div className="legend-body">

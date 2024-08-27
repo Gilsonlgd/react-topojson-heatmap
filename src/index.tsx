@@ -13,7 +13,7 @@ import brazilTopoJson from "./brazil-topojson.json";
 import "./index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
-interface HeatmapBrazilProps {
+interface TopoHeatmapProps {
   children?: React.ReactNode[] | React.ReactNode;
   data: Record<string, number>;
   metadata?: Metadata;
@@ -22,13 +22,13 @@ interface HeatmapBrazilProps {
   onClick?: (geo: GeographyType) => void;
 }
 
-function HeatmapBrazil({
+function TopoHeatmap({
   children = [],
   data,
   metadata,
   domain,
   colorRange = ["#90caff", "#2998ff"],
-}: HeatmapBrazilProps): JSX.Element {
+}: TopoHeatmapProps): JSX.Element {
   const componentId = useId().replace(/:/g, "");
 
   const maxValue = Math.max(...Object.values(data));
@@ -56,7 +56,7 @@ function HeatmapBrazil({
     if (tooltipProps && metadata && tooltipProps.tooltipContent) {
       return (
         <div
-          className={`react-brazil-heatmap__tooltip ${
+          className={`react-topojson-heatmap__tooltip ${
             tooltipProps.position || "top"
           }`}
         >
@@ -66,7 +66,7 @@ function HeatmapBrazil({
     } else {
       return (
         <div
-          className={`react-brazil-heatmap__tooltip ${
+          className={`react-topojson-heatmap__tooltip ${
             tooltipProps?.position || "top"
           }`}
         >
@@ -83,7 +83,7 @@ function HeatmapBrazil({
   };
 
   return (
-    <div className="react-brazil-heatmap">
+    <div className="react-topojson-heatmap">
       {legendProps && (
         <Legend
           domain={legendProps.domain || domain || [0, maxValue]}
@@ -113,7 +113,7 @@ function HeatmapBrazil({
               const stateValue = data[geo.id] || 0;
               return (
                 <Geography
-                  className="react-brazil-heatmap__state"
+                  className="react-topojson-heatmap__state"
                   key={geo.rsmKey}
                   geography={geo}
                   fill={colorScale(stateValue)}
@@ -144,6 +144,6 @@ function HeatmapBrazil({
   );
 }
 
-export default HeatmapBrazil;
+export default TopoHeatmap;
 export type { GeographyType, Metadata, MetaItem };
 export { Legend, Tooltip } from "./components";
