@@ -8,8 +8,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: "src/index.tsx",
-      name: "react-brazil-heatmap",
-      fileName: (format) => `react-brazil-heatmap.${format}.js`,
+      name: "react-topojson-heatmap",
+      fileName: (format) => `react-topojson-heatmap.${format}.js`,
     },
     rollupOptions: {
       external: ["react", "react-dom", "react/jsx-runtime", "react-dom/server"],
