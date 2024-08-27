@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import React, { useId, useEffect } from "react";
 import ReactDOMServer from "react-dom/server";
 
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
@@ -9,6 +9,11 @@ import { Topology } from "topojson-specification";
 import type { Geography as GeographyType, Metadata, MetaItem } from "./types";
 
 import { getChildByType } from "./utils/reactHandling";
+import {
+  validateGeometriesHaveId,
+  validateDataKeys,
+  validateMetadataKeys,
+} from "./utils/errorHandling";
 import { Tooltip as TT, Legend } from "./components";
 
 import "./index.css";
@@ -37,6 +42,13 @@ function TopoHeatmap({
   const colorScale = scaleLinear<string>()
     .domain(domain || [0, maxValue])
     .range(colorRange);
+
+  // Data format error handling
+  useEffect(() => {
+    validateGeometriesHaveId(topojson);
+    validateDataKeys(topojson, data);
+    if (metadata) validateMetadataKeys(data, metadata);
+  }, [topojson]);
 
   const tooltipProps = TT.getTooltipProps(getChildByType(children, TT));
   const legendProps = Legend.getLegendProps(getChildByType(children, Legend));
