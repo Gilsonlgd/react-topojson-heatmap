@@ -1,25 +1,27 @@
-# react-brazil-heatmap
+# react-topojson-heatmap
 
-A React component for displaying a heatmap of Brazil. Ideal for visualizing data distribution across Brazilian states or regions.
+A highly flexible React component for displaying heatmaps using TopoJSON data. Supports custom TopoJSON inputs, allowing users to visualize data distributions across any geographical region.
 
 ## Features
 
 - Easy integration with React applications
+- Supports custom TopoJSON inputs for any region or country
 - Customizable colors and data input
 - Interactive and responsive design
+- Perfect for visualizing geospatial data on custom maps
 
 ## Installation
 
 To install the package, use npm:
 
 ```bash
-npm install react-brazil-heatmap
+npm npm install react-topojson-heatmap
 ```
 
 Or with yarn:
 
 ```bash
-yarn add react-brazil-heatmap
+yarn add react-topojson-heatmap
 ```
 
 ## Input Data
@@ -53,7 +55,7 @@ const metadata = {
 
 ### Main Component
 
-The `react-brazil-heatmap` component accepts the following props:
+The `react-topojson-heatmap` component accepts the following props:
 
 | Prop        | Type                           | Description                                                                                    | Default                                                  |
 | ----------- | ------------------------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
@@ -68,13 +70,13 @@ Basic example usage:
 
 ```javascript
 import React from 'react';
-import BrazilHeatmap from 'react-brazil-heatmap';
+import TopoHeatmap from 'react-topojson-heatmap';
 
 function App() {
   return (
     <div className="App">
-      <h1>Brazil Heatmap</h1>
-      <BrazilHeatmap data={data} metadata={metadata}/>
+      <h1>TopoJSON Heatmap</h1>
+      <TopoHeatmap data={data} metadata={metadata}/>
     </div>
   );
 }
@@ -100,7 +102,7 @@ Used to display a tooltip with relevant information about each state.
 Example Usage (using bootstrap):
 ```javascript
 import React from 'react';
-import BrazilHeatmap, { Tooltip, MetaItem } from 'react-brazil-heatmap';
+import TopoHeatmap, { Tooltip, MetaItem } from 'react-topojson-heatmap';
 
 function App() {
   const tooltipContent = (meta: MetaItem): React.ReactNode => {
@@ -120,13 +122,13 @@ function App() {
   };
   return (
     <div className="App">
-      <BrazilHeatmap data={data} metadata={metadata}>
+      <TopoHeatmap data={data} metadata={metadata}>
         <Tooltip
           float
           trigger="hover"
           tooltipContent={tooltipContent}
         />
-      </BrazilHeatmap>
+      </TopoHeatmap>
     </div>
   );
 }
@@ -146,12 +148,12 @@ Used to display the heatmap color scale legend.
 Example Usage (using bootstrap):
 ```javascript
 import React from 'react';
-import BrazilHeatmap, { Legend } from 'react-brazil-heatmap';
+import TopoHeatmap, { Legend } from 'react-topojson-heatmap';
 
 function App() {
   return (
     <div className="App">
-      <BrazilHeatmap data={data} metadata={metadata}>
+      <TopoHeatmap data={data} metadata={metadata}>
         <Legend
           stepSize={10}
           formatter={value => {
@@ -162,7 +164,7 @@ function App() {
             Public Schools Percentage
           </strong>
         </Legend>
-      </BrazilHeatmap>
+      </TopoHeatmap>
     </div>
   );
 }
@@ -177,22 +179,22 @@ Each component can be customized by overriding specific CSS classes.
 
 ### Main Component
 
-- **`.react-brazil-heatmap`**: Controls the overall layout and dimensions of the heatmap.
-- **`.react-brazil-heatmap__state`**: Styles each individual state within the heatmap, managing outline, border, and transition effects.
-- **`.react-brazil-heatmap__state:hover`**: Defines the hover behavior for each state.
+- **`.react-topojson-heatmap`**: Controls the overall layout and dimensions of the heatmap.
+- **`.react-topojson-heatmap__state`**: Styles each individual state within the heatmap, managing outline, border, and transition effects.
+- **`.react-topojson-heatmap__state:hover`**: Defines the hover behavior for each state.
 
 ### Tooltip
 The tooltip component can also be customized by overriding the following CSS classes:
 
-- **`.react-brazil-heatmap__tooltip`**: Defines the overall appearance of the tooltip.
+- **`.react-topojson-heatmap__tooltip`**: Defines the overall appearance of the tooltip.
   
-- **`.react-brazil-heatmap__tooltip.bottom::before`**: Styles the arrow at the top of the tooltip when it's positioned at the bottom. The arrow is created using CSS borders.
+- **`.react-topojson-heatmap__tooltip.bottom::before`**: Styles the arrow at the top of the tooltip when it's positioned at the bottom. The arrow is created using CSS borders.
 
-- **`.react-brazil-heatmap__tooltip.top::before`**: Styles the arrow at the bottom of the tooltip when it's positioned at the top.
+- **`.react-topojson-heatmap__tooltip.top::before`**: Styles the arrow at the bottom of the tooltip when it's positioned at the top.
 
-- **`.react-brazil-heatmap__tooltip.right::before`**: Styles the arrow on the left side of the tooltip when it's positioned to the right.
+- **`.react-topojson-heatmap__tooltip.right::before`**: Styles the arrow on the left side of the tooltip when it's positioned to the right.
 
-- **`.react-brazil-heatmap__tooltip.left::before`**: Styles the arrow on the right side of the tooltip when it's positioned to the left.
+- **`.react-topojson-heatmap__tooltip.left::before`**: Styles the arrow on the right side of the tooltip when it's positioned to the left.
 
 **Note**: If you change the background color of the tooltips, you'll also need to update the arrow colors in the corresponding classes to match the new background.
 
@@ -200,17 +202,17 @@ The tooltip component can also be customized by overriding the following CSS cla
 ### Legend
 The legend component can be customized by overriding the following CSS classes:
 
-- **`.react-brazil-heatmap__legend`**: Defines the overall appearance of the legend.
+- **`.react-topojson-heatmap__legend`**: Defines the overall appearance of the legend.
 
-- **`.react-brazil-heatmap__legend .content-wrapper`**: Inherits layout properties from the parent legend class.
+- **`.react-topojson-heatmap__legend .content-wrapper`**: Inherits layout properties from the parent legend class.
 
-- **`.react-brazil-heatmap__legend .legend-header`**: Styles the header of the legend.
+- **`.react-topojson-heatmap__legend .legend-header`**: Styles the header of the legend.
 
-- **`.react-brazil-heatmap__legend .legend-body`**: Manages the layout of the legend's body, using flexbox to center content and defining font size and line height.
+- **`.react-topojson-heatmap__legend .legend-body`**: Manages the layout of the legend's body, using flexbox to center content and defining font size and line height.
 
-- **`.react-brazil-heatmap__legend .legend-item`**: Defines the layout of individual items within the legend.
+- **`.react-topojson-heatmap__legend .legend-item`**: Defines the layout of individual items within the legend.
 
-- **`.react-brazil-heatmap__legend .legend-color`**: Styles the color indicators in the legend, setting their size, shape, and spacing.
+- **`.react-topojson-heatmap__legend .legend-color`**: Styles the color indicators in the legend, setting their size, shape, and spacing.
 
 ## Contributing
 We welcome contributions! If you have suggestions, bug reports, or want to add new features, please open an issue or submit a pull request.
