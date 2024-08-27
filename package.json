@@ -1,0 +1,62 @@
+{
+  "name": "react-brazil-heatmap",
+  "version": "1.0.0",
+  "description": "A React component for displaying a heatmap of Brazil. Ideal for visualizing data distribution across Brazilian states or regions.",
+  "main": "dist/react-brazil-heatmap.umd.js",
+  "module": "dist/react-brazil-heatmap.es.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "vite build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gilsonlgd/react-brazil-heatmap.git"
+  },
+  "keywords": [
+    "brazil",
+    "brazil",
+    "heatmap",
+    "react-brazil-heatmap",
+    "brazil-heatmap",
+    "mapa-de-calor"
+  ],
+  "author": "Gilson Garcia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gilsonlgd/react-brazil-heatmap/issues"
+  },
+  "homepage": "https://github.com/Gilsonlgd/react-brazil-heatmap#readme",
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "d3": "^7.9.0",
+    "d3-scale": "^4.0.2",
+    "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^5.28.0",
+    "topojson-client": "^3.1.0",
+    "tslib": "^2.6.3",
+    "vite-plugin-dts": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/d3-scale": "^4.0.8",
+    "@types/node": "^22.1.0",
+    "@types/react": "^18.3.3",
+    "@types/react-simple-maps": "^3.0.6",
+    "@types/topojson-client": "^3.1.4",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.1",
+    "@typescript-eslint/parser": "^8.0.1",
+    "eslint": "^9.8.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5",
+    "vite-plugin-libcss": "^1.1.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}
