@@ -1,9 +1,9 @@
 {
-  "name": "react-brazil-heatmap",
+  "name": "react-topojson-heatmap",
   "version": "1.0.0",
-  "description": "A React component for displaying a heatmap of Brazil. Ideal for visualizing data distribution across Brazilian states or regions.",
-  "main": "dist/react-brazil-heatmap.umd.js",
-  "module": "dist/react-brazil-heatmap.es.js",
+  "description": "A highly flexible React component for displaying heatmaps using TopoJSON data. Supports custom TopoJSON inputs, allowing users to visualize data distributions across any geographical region.",
+  "main": "dist/react-topojson-heatmap.umd.js",
+  "module": "dist/react-topojson-heatmap.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build",
@@ -12,22 +12,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gilsonlgd/react-brazil-heatmap.git"
+    "url": "git+https://github.com/Gilsonlgd/react-topojson-heatmap.git"
   },
   "keywords": [
-    "brazil",
-    "brazil",
+    "topojson",
     "heatmap",
-    "react-brazil-heatmap",
-    "brazil-heatmap",
-    "mapa-de-calor"
+    "react-topojson-heatmap",
+    "topojson-heatmap",
+    "mapa-de-calor",
+    "react",
+    "geojson",
+    "data visualization",
+    "geographical data",
+    "react heatmap",
+    "maps",
+    "spatial data",
+    "visualization",
+    "geospatial analysis"
   ],
   "author": "Gilson Garcia",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Gilsonlgd/react-brazil-heatmap/issues"
+    "url": "https://github.com/Gilsonlgd/react-topojson-heatmap/issues"
   },
-  "homepage": "https://github.com/Gilsonlgd/react-brazil-heatmap#readme",
+  "homepage": "https://github.com/Gilsonlgd/react-topojson-heatmap#readme",
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.1",
     "d3": "^7.9.0",
