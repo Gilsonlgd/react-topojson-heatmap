@@ -55,7 +55,7 @@ function TopoHeatmap({
   const tooltipProps = TT.getTooltipProps(getChildByType(children, TT));
   const legendProps = Legend.getLegendProps(getChildByType(children, Legend));
 
-  const getTooltipContent = (geoId: string): React.ReactNode => {
+  const getTooltipContent = (geoId: string | number): React.ReactNode => {
     if (tooltipProps && metadata && tooltipProps.tooltipContent) {
       return (
         <div
@@ -117,13 +117,13 @@ function TopoHeatmap({
               return (
                 <Geography
                   className="react-topojson-heatmap__state"
-                  key={`${componentId}_${geo.id}`}
+                  key={`${componentId}_${getProperty(geo, idPath)}`}
                   geography={geo}
                   fill={colorScale(stateValue)}
-                  id={`geo-${componentId}-${geo.id}`}
+                  id={`geo-${componentId}-${getProperty(geo, idPath)}`}
                   data-tooltip-id={`tooltip-${componentId}`}
                   data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                    getTooltipContent(geo.id)
+                    getTooltipContent(getProperty(geo, idPath))
                   )}
                 />
               );
