@@ -8,7 +8,7 @@ import { scaleLinear } from "d3-scale";
 import { Topology } from "topojson-specification";
 import type { Geography as GeographyType, Metadata, MetaItem } from "./types";
 
-import { getChildByType } from "./utils/reactHandling";
+import { getChildByType, getProperty } from "./utils/reactHandling";
 import {
   validateGeometriesHaveId,
   validateDataKeys,
@@ -22,6 +22,7 @@ import "react-tooltip/dist/react-tooltip.css";
 interface TopoHeatmapProps {
   data: Record<string, number>;
   topojson: Topology;
+  idPath?: string;
   metadata?: Metadata;
   children?: React.ReactNode[] | React.ReactNode;
   colorRange?: [string, string];
@@ -34,6 +35,7 @@ function TopoHeatmap({
   data,
   metadata,
   topojson,
+  idPath = "id",
   domain,
   colorRange = ["#90caff", "#2998ff"],
 }: TopoHeatmapProps): JSX.Element {
@@ -45,8 +47,8 @@ function TopoHeatmap({
 
   // Data format error handling
   useEffect(() => {
-    validateGeometriesHaveId(topojson);
-    validateDataKeys(topojson, data);
+    validateGeometriesHaveId(topojson, idPath);
+    validateDataKeys(topojson, data, idPath);
     if (metadata) validateMetadataKeys(data, metadata);
   }, [topojson]);
 
@@ -111,7 +113,7 @@ function TopoHeatmap({
         <Geographies geography={topojson} style={{ flexGrow: 1 }}>
           {({ geographies }: { geographies: GeographyType[] }) =>
             geographies.map((geo) => {
-              const stateValue = data[geo.id] || 0;
+              const stateValue = data[getProperty(geo, idPath)] || 0;
               return (
                 <Geography
                   className="react-topojson-heatmap__state"
