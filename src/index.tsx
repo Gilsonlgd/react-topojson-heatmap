@@ -1,14 +1,25 @@
-import React, { useId, useEffect } from "react";
+import React, { useId, useEffect, useState } from "react";
 import ReactDOMServer from "react-dom/server";
 
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  ProjectionFunction,
+} from "react-simple-maps";
 import { Tooltip } from "react-tooltip";
+import { geoMercator } from "d3";
 import { scaleLinear } from "d3-scale";
+import { feature } from "topojson-client";
 
 import { Topology } from "topojson-specification";
 import type { Geography as GeographyType, Metadata, MetaItem } from "./types";
 
-import { getChildByType, getProperty } from "./utils/reactHandling";
+import {
+  getChildByType,
+  getProperty,
+  getObjectFirstProperty,
+} from "./utils/reactHandling";
 import {
   validateGeometriesHaveId,
   validateDataKeys,
@@ -19,14 +30,25 @@ import { Tooltip as TT, Legend } from "./components";
 import "./index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
+type Topo = {
+  [key: string]: {
+    type: "GeometryCollection";
+    bbox?: [number, number, number, number];
+    geometries: Array<any>;
+  };
+};
+
 interface TopoHeatmapProps {
   data: Record<string, number>;
-  topojson: Topology;
+  topojson: Topology<Topo>;
   idPath?: string;
   metadata?: Metadata;
   children?: React.ReactNode[] | React.ReactNode;
   colorRange?: [string, string];
   domain?: [number, number];
+  scale?: number;
+  translate?: [number, number];
+  fitSize?: boolean;
   onClick?: (geo: GeographyType) => void;
 }
 
@@ -38,7 +60,16 @@ function TopoHeatmap({
   idPath = "id",
   domain,
   colorRange = ["#90caff", "#2998ff"],
+  scale = 1,
+  translate = [0, 0],
+  fitSize = true,
+  onClick,
 }: TopoHeatmapProps): JSX.Element {
+  // SVG viewport dimensions.
+  const width = 600;
+  const height = 600;
+  const [projection, setProjection] = useState(() => geoMercator());
+
   const componentId = useId().replace(/:/g, "");
   const maxValue = Math.max(...Object.values(data));
   const colorScale = scaleLinear<string>()
@@ -50,6 +81,15 @@ function TopoHeatmap({
     validateGeometriesHaveId(topojson, idPath);
     validateDataKeys(topojson, data, idPath);
     if (metadata) validateMetadataKeys(data, metadata);
+  }, [topojson]);
+
+  useEffect(() => {
+    const geojson = feature(topojson, getObjectFirstProperty(topojson.objects));
+    let newProjection = geoMercator();
+    if (fitSize)
+      newProjection = newProjection.fitSize([width, height], geojson);
+    newProjection = newProjection.scale(newProjection.scale() * scale);
+    setProjection(() => newProjection);
   }, [topojson]);
 
   const tooltipProps = TT.getTooltipProps(getChildByType(children, TT));
@@ -98,17 +138,9 @@ function TopoHeatmap({
         </Legend>
       )}
       <ComposableMap
-        style={{
-          width: legendProps ? "95%" : "100%",
-          height: "auto",
-          marginLeft: "auto",
-        }}
-        projection="geoMercator"
-        projectionConfig={{
-          scale: 1100,
-          center: [-54, -15],
-        }}
-        viewBox="0 -100 800 800"
+        width={width}
+        height={height}
+        projection={projection as unknown as ProjectionFunction}
       >
         <Geographies geography={topojson} style={{ flexGrow: 1 }}>
           {({ geographies }: { geographies: GeographyType[] }) =>
@@ -125,6 +157,9 @@ function TopoHeatmap({
                   data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
                     getTooltipContent(getProperty(geo, idPath))
                   )}
+                  onClick={() => {
+                    if (onClick) onClick(geo);
+                  }}
                 />
               );
             })

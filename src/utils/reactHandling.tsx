@@ -1,5 +1,15 @@
 import React from "react";
 
+const getObjectFirstProperty = (obj: any): any => {
+  const keys = Object.keys(obj);
+  if (keys.length > 0) {
+    return obj[keys[0]];
+  }
+
+  return undefined;
+};
+
+// Get the object property defined by the given path
 const getProperty = <T,>(obj: T, path: string): string | number => {
   const value = path
     .split(".")
@@ -23,4 +33,4 @@ const getChildByType = (
   return null;
 };
 
-export { getChildByType, getProperty };
+export { getObjectFirstProperty, getChildByType, getProperty };

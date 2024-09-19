@@ -39,6 +39,7 @@
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.1",
     "d3": "^7.9.0",
+    "d3-geo": "^3.1.1",
     "d3-scale": "^4.0.2",
     "react-simple-maps": "^3.0.0",
     "react-tooltip": "^5.28.0",
@@ -53,7 +54,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-simple-maps": "^3.0.6",
-    "@types/topojson-client": "^3.1.4",
+    "@types/topojson-client": "^3.1.5",
     "@types/topojson-specification": "^1.0.5",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
