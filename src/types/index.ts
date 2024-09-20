@@ -1,10 +1,10 @@
 export type Geography = {
-  type: string;
+  type?: string;
   properties: {
     [key: string]: any;
   };
-  id: string;
-  arcs: any[];
+  id?: string;
+  arcs?: any[];
 };
 
 export type MetaItem = {
