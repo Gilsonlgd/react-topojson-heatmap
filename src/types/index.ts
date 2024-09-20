@@ -14,3 +14,11 @@ export type MetaItem = {
 export type Metadata = {
   [key: string]: MetaItem;
 };
+
+export type TopoObj = {
+  [key: string]: {
+    type: "GeometryCollection";
+    bbox?: [number, number, number, number];
+    geometries: Array<any>;
+  };
+};

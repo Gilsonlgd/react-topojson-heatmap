@@ -13,7 +13,12 @@ import { scaleLinear } from "d3-scale";
 import { feature } from "topojson-client";
 
 import { Topology } from "topojson-specification";
-import type { Geography as GeographyType, Metadata, MetaItem } from "./types";
+import type {
+  Geography as GeographyType,
+  Metadata,
+  MetaItem,
+  TopoObj,
+} from "./types";
 
 import {
   getChildByType,
@@ -30,17 +35,9 @@ import { Tooltip as TT, Legend } from "./components";
 import "./index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
-type Topo = {
-  [key: string]: {
-    type: "GeometryCollection";
-    bbox?: [number, number, number, number];
-    geometries: Array<any>;
-  };
-};
-
 interface TopoHeatmapProps {
   data: Record<string, number>;
-  topojson: Topology<Topo>;
+  topojson: Topology<TopoObj>;
   idPath?: string;
   metadata?: Metadata;
   children?: React.ReactNode[] | React.ReactNode;
@@ -89,6 +86,10 @@ function TopoHeatmap({
     if (fitSize)
       newProjection = newProjection.fitSize([width, height], geojson);
     newProjection = newProjection.scale(newProjection.scale() * scale);
+    newProjection = newProjection.center([
+      newProjection.center()[0] + translate[0],
+      newProjection.center()[1] + translate[1],
+    ]);
     setProjection(() => newProjection);
   }, [topojson]);
 
