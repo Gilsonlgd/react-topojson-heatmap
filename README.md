@@ -10,6 +10,9 @@ A highly flexible React component for displaying heatmaps using TopoJSON data. S
 - Interactive and responsive design
 - Perfect for visualizing geospatial data on custom maps
 
+## Limitations
+This component currently supports only TopoJSON files containing a *single object* in the objects attribute. If your TopoJSON contains multiple objects, *only the first object* will be projected and rendered. Make sure to structure your TopoJSON data accordingly or filter the objects before passing them to the component.
+
 ## Installation
 
 To install the package, use npm:
@@ -51,19 +54,50 @@ const metadata = {
 }
 ```
 
+## Example: Using the IBGE Malhas API
+
+The **IBGE Malhas API** can be used as an example source for TopoJSON data with the `react-topojson-heatmap` component. The API provides geographic boundary data for Brazilian regions, such as states and municipalities, in TopoJSON format, which is compatible with this component.
+
+### Steps to Use the IBGE Malhas API with `react-topojson-heatmap`:
+
+1. Fetch the TopoJSON data for your desired region from the IBGE Malhas API. For example, to get the TopoJSON of Brazil, you can use the following API endpoint:
+
+  ```bash
+   https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/json&qualidade=maxima&intrarregiao=UF
+  ```
+2. Pass the fetched TopoJSON data to the topojson prop of the TopoHeatmap component, as shown below:
+
+```javascript
+<TopoHeatmap
+  data={data}
+  topojson={topojson}
+  idPath="properties.codarea"
+  colorRange={["#90caff", "#2998ff"]}
+/>
+```
+
+3. Customize the heatmap with your own data, colors, and settings.
+
+You can explore the IBGE Malhas API documentation here: https://servicodados.ibge.gov.br/api/docs/malhas?versao=3
+
 ## Props
 
 ### Main Component
 
 The `react-topojson-heatmap` component accepts the following props:
 
-| Prop        | Type                           | Description                                                                                    | Default                                                  |
-| ----------- | ------------------------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| data        | `Record<string, number>`       | An object containing the values for each state. The key should correspond to the state's code. | NA                                                       |
-| metadata?   | `Metadata`                     | An object specifying metadata for each state, such as names or descriptions.                   | undefined                                                |
-| colorRange? | `[string, string]`             | An array of two colors that define the color range for the heatmap.                            | `["#90caff", "#2998ff"]`                                 |
-| domain?     | `[number, number]`             | An array containing the minimum and maximum values for the data range.                         | `[0, maxValue]` where maxValue is the max value in data. |
-| onClick?    | `(geo: GeographyType) => void` | A callback function called when a state is clicked, receiving information about the geography. | `() => {}`                                               |
+| Prop          | Type                                   | Description                                                                                     | Default                                                       |
+| ------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `data`        | `Record<string, number>`               | An object containing the values for each state. The key should correspond to the state's code.  | NA                                                            |
+| `metadata?`   | `Metadata`                             | An object specifying metadata for each state, such as names or descriptions.                    | `undefined`                                                   |
+| `topojson`    | `Topology<TopoObj>`                    | The TopoJSON data used for rendering the geographical regions.                                  | NA                                                            |
+| `idPath?`     | `string`                               | The key used to identify each region in the TopoJSON data.                                      | `"id"`                                                        |
+| `colorRange?` | `[string, string]`                     | An array of two colors that define the color range for the heatmap.                             | `["#90caff", "#2998ff"]`                                      |
+| `domain?`     | `[number, number]`                     | An array containing the minimum and maximum values for the data range.                          | `[0, maxValue]`, where `maxValue` is the max value in `data`. |
+| `scale?`      | `number`                               | A scale factor to manually adjust the size of the rendered map.                                 | `1`                                                           |
+| `translate?`  | `[number, number]`                     | An array defining the x and y translation to position the map.                                  | `[0, 0]`                                                      |
+| `fitSize?`    | `boolean`                              | Whether to fit the size of the map to the container's dimensions.                               | `true`                                                        |
+| `onClick?`    | `(geo: GeographyType) => void`         | A callback function called when a region is clicked, receiving information about the geography. | `() => {}`                                                    |
 
 
 Basic example usage:
@@ -76,7 +110,7 @@ function App() {
   return (
     <div className="App">
       <h1>TopoJSON Heatmap</h1>
-      <TopoHeatmap data={data} metadata={metadata}/>
+      <TopoHeatmap data={data} metadata={metadata} topojson={topojson}/>
     </div>
   );
 }
@@ -122,7 +156,7 @@ function App() {
   };
   return (
     <div className="App">
-      <TopoHeatmap data={data} metadata={metadata}>
+      <TopoHeatmap data={data} metadata={metadata} topojson={topojson}>
         <Tooltip
           float
           trigger="hover"
@@ -153,7 +187,7 @@ import TopoHeatmap, { Legend } from 'react-topojson-heatmap';
 function App() {
   return (
     <div className="App">
-      <TopoHeatmap data={data} metadata={metadata}>
+      <TopoHeatmap data={data} metadata={metadata} topojson={topojson}>
         <Legend
           stepSize={10}
           formatter={value => {
