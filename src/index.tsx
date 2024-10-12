@@ -47,6 +47,7 @@ interface TopoHeatmapProps {
   translate?: [number, number];
   fitSize?: boolean;
   onClick?: (geo: GeographyType) => void;
+  onSelect?: (geos: GeographyType[]) => void;
 }
 
 function TopoHeatmap({
@@ -61,11 +62,14 @@ function TopoHeatmap({
   translate = [0, 0],
   fitSize = true,
   onClick,
+  onSelect,
 }: TopoHeatmapProps): JSX.Element {
   // SVG viewport dimensions.
   const width = 600;
   const height = 600;
   const [projection, setProjection] = useState(() => geoMercator());
+
+  const [selectedGeos, setSelectedGeos] = useState<GeographyType[]>([]);
 
   const componentId = useId().replace(/:/g, "");
   const maxValue = Math.max(...Object.values(data));
@@ -92,6 +96,10 @@ function TopoHeatmap({
     ]);
     setProjection(() => newProjection);
   }, [topojson]);
+
+  useEffect(() => {
+    if (!onSelect) setSelectedGeos([]);
+  }, [onSelect]);
 
   const tooltipProps = TT.getTooltipProps(getChildByType(children, TT));
   const legendProps = Legend.getLegendProps(getChildByType(children, Legend));
@@ -126,6 +134,20 @@ function TopoHeatmap({
     }
   };
 
+  const handleSelectGeo = (geo: GeographyType): void => {
+    if (!onSelect) return;
+
+    if (!selectedGeos.includes(geo)) {
+      onSelect([...selectedGeos, geo]);
+      setSelectedGeos((prev) => {
+        return [...prev, geo];
+      });
+    } else {
+      onSelect(selectedGeos.filter((curr) => curr !== geo));
+      setSelectedGeos(selectedGeos.filter((curr) => curr !== geo));
+    }
+  };
+
   return (
     <div className="react-topojson-heatmap">
       {legendProps && (
@@ -149,7 +171,9 @@ function TopoHeatmap({
               const stateValue = data[getProperty(geo, idPath)] || 0;
               return (
                 <Geography
-                  className="react-topojson-heatmap__state"
+                  className={`react-topojson-heatmap__state ${
+                    selectedGeos.includes(geo) ? "selected" : ""
+                  }`}
                   key={`${componentId}_${getProperty(geo, idPath)}`}
                   geography={geo}
                   fill={colorScale(stateValue)}
@@ -160,6 +184,7 @@ function TopoHeatmap({
                   )}
                   onClick={() => {
                     if (onClick) onClick(geo);
+                    handleSelectGeo(geo);
                   }}
                 />
               );

@@ -16,6 +16,13 @@
   opacity: 0.8;
 }
 
+.react-topojson-heatmap__state.selected {
+  stroke: whitesmoke;
+  stroke-width: 1px;
+  fill: rgb(80, 200, 120);
+  filter: drop-shadow(0 0 10px rgba(80, 200, 120, 0.7));
+}
+
 .react-topojson-heatmap .w-100 {
   width: 100%;
 }

@@ -98,6 +98,7 @@ The `react-topojson-heatmap` component accepts the following props:
 | `translate?`  | `[number, number]`                     | An array defining the x and y translation to position the map.                                  | `[0, 0]`                                                      |
 | `fitSize?`    | `boolean`                              | Whether to fit the size of the map to the container's dimensions.                               | `true`                                                        |
 | `onClick?`    | `(geo: GeographyType) => void`         | A callback function called when a region is clicked, receiving information about the geography. | `() => {}`                                                    |
+| `onSelect?`   | `(geos: GeographyType[]) => void`      | A callback function called when a region is clicked that enables multiple selection, receiving information about all the currently selected regions. | `undefined`     |
 
 
 Basic example usage:
@@ -214,8 +215,9 @@ Each component can be customized by overriding specific CSS classes.
 ### Main Component
 
 - **`.react-topojson-heatmap`**: Controls the overall layout and dimensions of the heatmap.
-- **`.react-topojson-heatmap__state`**: Styles each individual state within the heatmap, managing outline, border, and transition effects.
-- **`.react-topojson-heatmap__state:hover`**: Defines the hover behavior for each state.
+- **`.react-topojson-heatmap__state`**: Styles each individual region within the heatmap, managing outline, border, and transition effects.
+- **`.react-topojson-heatmap__state:hover`**: Defines the hover behavior for each region.
+- **`.react-topojson-heatmap__state.selected `**: Defines the selected behavior for each region.
 
 ### Tooltip
 The tooltip component can also be customized by overriding the following CSS classes:
