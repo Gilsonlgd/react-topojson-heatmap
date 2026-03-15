@@ -7,6 +7,9 @@ import RegionLabel, {
 } from "./components/RegionLabel/RegionLabel";
 import Tooltip, { TooltipProps } from "./components/Tooltip/Tooltip";
 
+import { Topology } from "topojson-specification";
+import { DataItem } from "./types";
+
 const TopoHeatmapComponent = Object.assign(TopoHeatmap, {
   Legend,
   RegionLabel,
@@ -15,4 +18,11 @@ const TopoHeatmapComponent = Object.assign(TopoHeatmap, {
 
 export { TopoHeatmapComponent as TopoHeatmap };
 
-export type { TopoHeatmapProps, LegendProps, RegionLabelProps, TooltipProps };
+export type {
+  TopoHeatmapProps,
+  LegendProps,
+  RegionLabelProps,
+  TooltipProps,
+  Topology,
+  DataItem,
+};

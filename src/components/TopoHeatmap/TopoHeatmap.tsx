@@ -25,6 +25,8 @@ import {
   validateDataKeys,
 } from "utils/errorHandling";
 
+import RegionLabel from "../RegionLabel/RegionLabel";
+
 import { HeatmapContext } from "./TopoHeatmap.context";
 
 export interface TopoHeatmapProps {
@@ -64,6 +66,19 @@ function TopoHeatmap({
   const [selectedGeos, setSelectedGeos] = useState<GeographyType[]>([]);
 
   const componentId = useId().replace(/:/g, "");
+
+  const svgChildren: React.ReactNode[] = [];
+  const uiChildren: React.ReactNode[] = [];
+
+  React.Children.forEach(children, (child) => {
+    if (!React.isValidElement(child)) return;
+
+    if (child.type === RegionLabel) {
+      svgChildren.push(child);
+    } else {
+      uiChildren.push(child);
+    }
+  });
 
   // Extract values using valueKey
   const extractValue = (item: DataItem): number => {
@@ -161,11 +176,12 @@ function TopoHeatmap({
                   />
                 );
               })}
-              {children}
+              {svgChildren}
             </>
           )}
         </Geographies>
       </ComposableMap>
+      {uiChildren}
     </HeatmapContext.Provider>
   );
 }

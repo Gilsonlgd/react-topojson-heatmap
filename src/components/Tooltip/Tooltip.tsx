@@ -30,9 +30,25 @@ function Tooltip({
       | number;
     const regionData = data?.[regionId];
 
-    if (!tooltipContent) return regionId;
-
-    return tooltipContent(regionData);
+    if (regionData && tooltipContent) {
+      return (
+        <div className={`react-topojson-heatmap__tooltip ${position}`}>
+          {tooltipContent(regionData)}
+        </div>
+      );
+    } else {
+      return (
+        <div className={`react-topojson-heatmap__tooltip ${position}`}>
+          <h3
+            style={{
+              color: "#ffff",
+            }}
+          >
+            {regionId}
+          </h3>
+        </div>
+      );
+    }
   };
 
   return (
