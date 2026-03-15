@@ -1,5 +1,4 @@
 import React, { useId, useEffect, useState } from "react";
-import ReactDOMServer from "react-dom/server";
 
 import {
   ComposableMap,
@@ -19,10 +18,7 @@ import type {
   TopoObj,
 } from "types";
 
-import {
-  getProperty,
-  getObjectFirstProperty,
-} from "utils/reactHandling";
+import { getProperty, getObjectFirstProperty } from "utils/reactHandling";
 import {
   validateGeometriesHaveId,
   validateDataKeys,
@@ -122,7 +118,6 @@ function TopoHeatmap({
     }
   };
 
-
   const context = {
     data,
     idPath,
@@ -159,13 +154,7 @@ function TopoHeatmap({
                     fill={colorScale(stateValue)}
                     id={`geo-${componentId}-${geoId}`}
                     data-tooltip-id={`tooltip-${componentId}`}
-                    /* TODO: data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                      getTooltipContent(geoId),
-                    )} */
                     data-region-label-id={`region-label-${componentId}`}
-                    /* TODO: data-region-label-html={ReactDOMServer.renderToStaticMarkup(
-                      getRegionLabelContent(geoId),
-                    )} */
                     onClick={() => {
                       if (onClick) onClick(geo);
                       handleSelectGeo(geo);
