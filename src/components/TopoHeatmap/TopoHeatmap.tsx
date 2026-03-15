@@ -7,8 +7,7 @@ import {
   Geography,
   ProjectionFunction,
 } from "react-simple-maps";
-import { Tooltip } from "react-tooltip";
-import { geoMercator, geoCentroid, GeoGeometryObjects } from "d3";
+import { geoMercator } from "d3";
 import { scaleLinear } from "d3-scale";
 import { feature } from "topojson-client";
 
@@ -18,25 +17,23 @@ import type {
   Data,
   DataItem,
   TopoObj,
-} from "./types";
+} from "types";
 
 import {
-  getChildByType,
   getProperty,
   getObjectFirstProperty,
-} from "./utils/reactHandling";
+} from "utils/reactHandling";
 import {
   validateGeometriesHaveId,
   validateDataKeys,
-} from "./utils/errorHandling";
-import { centerRect } from "./utils/mathUtils";
-
-import { Tooltip as TT, Legend, RegionLabel } from "components";
+} from "utils/errorHandling";
 
 import "./index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
-interface TopoHeatmapProps {
+import { HeatmapContext } from "./TopoHeatmap.context";
+
+export interface TopoHeatmapProps {
   data: Data;
   topojson: Topology<TopoObj>;
   valueKey: string;
@@ -111,60 +108,6 @@ function TopoHeatmap({
     if (!onSelect) setSelectedGeos([]);
   }, [onSelect]);
 
-  const tooltipProps = TT.getTooltipProps(getChildByType(children, TT));
-  const legendProps = Legend.getLegendProps(getChildByType(children, Legend));
-  const regionLabelProps = RegionLabel.getRegionLabelProps(
-    getChildByType(children, RegionLabel)
-  );
-
-  const getTooltipContent = (geoId: string | number): React.ReactNode => {
-    if (tooltipProps && data[geoId] && tooltipProps.tooltipContent) {
-      return (
-        <div
-          className={`react-topojson-heatmap__tooltip ${
-            tooltipProps.position || "top"
-          }`}
-        >
-          {tooltipProps.tooltipContent(data[geoId])}
-        </div>
-      );
-    } else {
-      return (
-        <div
-          className={`react-topojson-heatmap__tooltip ${
-            tooltipProps?.position || "top"
-          }`}
-        >
-          <h3
-            style={{
-              color: "#ffff",
-            }}
-          >
-            {geoId}
-          </h3>
-        </div>
-      );
-    }
-  };
-
-  const getRegionLabelContent = (geoId: string | number): React.ReactNode => {
-    if (
-      regionLabelProps &&
-      data[geoId] &&
-      regionLabelProps?.regionLabelContent
-    ) {
-      return (
-        <div className={`react-topojson-heatmap__region-label`}>
-          {regionLabelProps.regionLabelContent(data[geoId])}
-        </div>
-      );
-    } else {
-      return (
-        <div className={`react-topojson-heatmap__region-label`}>{geoId}</div>
-      );
-    }
-  };
-
   const handleSelectGeo = (geo: GeographyType): void => {
     if (!onSelect) return;
 
@@ -179,22 +122,18 @@ function TopoHeatmap({
     }
   };
 
+
+  const context = {
+    data,
+    idPath,
+    domain,
+    colorScale,
+    projection,
+    maxValue,
+    componentId,
+  };
   return (
-    <div className="react-topojson-heatmap">
-      {legendProps && (
-        <Legend
-          domain={legendProps.domain || domain || [0, maxValue]}
-          colorScale={legendProps.colorScale || colorScale}
-          scaleType={legendProps.scaleType}
-          stepSize={legendProps.stepSize}
-          minValueLabel={legendProps.minValueLabel}
-          maxValueLabel={legendProps.maxValueLabel}
-          height={legendProps.height}
-          formatter={legendProps.formatter}
-        >
-          {legendProps.children}
-        </Legend>
-      )}
+    <HeatmapContext.Provider value={context}>
       <ComposableMap
         width={width}
         height={height}
@@ -220,13 +159,13 @@ function TopoHeatmap({
                     fill={colorScale(stateValue)}
                     id={`geo-${componentId}-${geoId}`}
                     data-tooltip-id={`tooltip-${componentId}`}
-                    data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                      getTooltipContent(geoId)
-                    )}
+                    /* TODO: data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
+                      getTooltipContent(geoId),
+                    )} */
                     data-region-label-id={`region-label-${componentId}`}
-                    data-region-label-html={ReactDOMServer.renderToStaticMarkup(
-                      getRegionLabelContent(geoId)
-                    )}
+                    /* TODO: data-region-label-html={ReactDOMServer.renderToStaticMarkup(
+                      getRegionLabelContent(geoId),
+                    )} */
                     onClick={() => {
                       if (onClick) onClick(geo);
                       handleSelectGeo(geo);
@@ -234,60 +173,13 @@ function TopoHeatmap({
                   />
                 );
               })}
-              {/**
-               * Handle region labels printing
-               */}
-              {regionLabelProps &&
-                geographies.map((geo) => {
-                  const width = regionLabelProps?.width ?? 75;
-                  const height = regionLabelProps?.height ?? 50;
-                  const [x, y] = centerRect(
-                    projection(geoCentroid(geo as GeoGeometryObjects)) || [
-                      0, 0,
-                    ],
-                    width,
-                    height
-                  );
-                  return (
-                    <foreignObject
-                      key={`${componentId}_label_${getProperty(geo, idPath)}`}
-                      x={x}
-                      y={y}
-                      width={width}
-                      height={height}
-                      /* Handle label superposition */
-                      onMouseEnter={(e) => {
-                        const node = e.currentTarget;
-                        const parent = node.parentNode;
-                        if (parent) {
-                          parent.appendChild(node);
-                        }
-                      }}
-                    >
-                      {getRegionLabelContent(getProperty(geo, idPath))}
-                    </foreignObject>
-                  );
-                })}
+              {children}
             </>
           )}
         </Geographies>
       </ComposableMap>
-      <Tooltip
-        id={`tooltip-${componentId}`}
-        hidden={!!!tooltipProps}
-        openOnClick={tooltipProps?.trigger === "click"}
-        float={tooltipProps?.float || false}
-        place={tooltipProps?.position || "top"}
-        border="none"
-        style={{
-          padding: 0,
-          backgroundColor: "transparent",
-        }}
-      />
-    </div>
+    </HeatmapContext.Provider>
   );
 }
 
 export default TopoHeatmap;
-export type { GeographyType, Data, DataItem, Topology };
-export { Legend, Tooltip, RegionLabel } from "./components";

@@ -1,26 +1,63 @@
 import React from "react";
-
-import type { DataItem } from "src/types";
 import "./RegionLabel.css";
+
+import { geoCentroid } from "d3-geo";
+import { GeoGeometryObjects } from "d3";
+
+import { useHeatmapContext } from "hooks/useHeatmapContext";
+import { useMapContext } from "hooks/useMapContext";
+
+import { getProperty } from "utils/reactHandling";
 
 export type RegionLabelProps = {
   width?: number;
   height?: number;
-  regionLabelContent?: (meta: DataItem) => React.ReactNode;
+  content?: (regionId: string | number, data?: any) => React.ReactNode;
 };
 
-function RegionLabel({}: RegionLabelProps): null {
-  return null;
+function RegionLabel({
+  width = 75,
+  height = 50,
+  content,
+}: RegionLabelProps): JSX.Element {
+  const { idPath, componentId, data } = useHeatmapContext();
+  const { geographies, projection } = useMapContext();
+
+  return (
+    <>
+      {geographies.map((geo) => {
+        const regionId = getProperty(geo, idPath);
+
+        const centroid = projection(geoCentroid(geo as GeoGeometryObjects)) || [
+          0, 0,
+        ];
+
+        const x = centroid[0] - width / 2;
+        const y = centroid[1] - height / 2;
+
+        return (
+          <foreignObject
+            key={`${componentId}_label_${regionId}`}
+            x={x}
+            y={y}
+            width={width}
+            height={height}
+            onMouseEnter={(e) => {
+              const node = e.currentTarget;
+              const parent = node.parentNode;
+              if (parent) {
+                parent.appendChild(node);
+              }
+            }}
+          >
+            <div className="react-topojson-heatmap__region-label">
+              {content ? content(regionId, data?.[regionId]) : regionId}
+            </div>
+          </foreignObject>
+        );
+      })}
+    </>
+  );
 }
-
-RegionLabel.getRegionLabelProps = (
-  regionLabel: React.ReactNode
-): RegionLabelProps | null => {
-  if (React.isValidElement(regionLabel) && regionLabel.type === RegionLabel) {
-    const props = regionLabel.props as RegionLabelProps;
-    return props;
-  }
-  return null;
-};
 
 export default RegionLabel;

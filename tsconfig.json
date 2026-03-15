@@ -24,8 +24,11 @@
     "paths": {
       "src/*": ["./*"],
       "components/*": ["./components/*"],
+      "components": ["./components/index.ts"],
       "types/*": ["./types/*"],
-      "providers/*": ["./providers/*"]
+      "types": ["./types/index.ts"],
+      "providers/*": ["./providers/*"],
+      "providers": ["./providers/index.ts"]
     }
   }
 }
