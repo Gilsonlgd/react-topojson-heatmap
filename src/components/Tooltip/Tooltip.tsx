@@ -1,4 +1,6 @@
 import React from "react";
+import "./Tooltip.css";
+import "react-tooltip/dist/react-tooltip.css";
 
 import { Tooltip as ReactTooltip, PlacesType } from "react-tooltip";
 import type { DataItem } from "types";

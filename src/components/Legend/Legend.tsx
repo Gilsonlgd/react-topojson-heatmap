@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import "./Legend.css";
 
-import { useHeatmapContext } from "src/hooks/useHeatmapContext";
+import { useHeatmapContext } from "hooks/useHeatmapContext";
 import { gradientStyle } from "./Legend.utils";
 import type { LegendType } from "./Legend.types";
 

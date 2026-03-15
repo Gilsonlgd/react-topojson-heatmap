@@ -1,4 +1,5 @@
 import React, { useId, useEffect, useState } from "react";
+import "./TopoHeatmap.css";
 
 import {
   ComposableMap,
@@ -23,9 +24,6 @@ import {
   validateGeometriesHaveId,
   validateDataKeys,
 } from "utils/errorHandling";
-
-import "./index.css";
-import "react-tooltip/dist/react-tooltip.css";
 
 import { HeatmapContext } from "./TopoHeatmap.context";
 
