@@ -1,55 +1,47 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./Legend.css";
+
+import { useHeatmapContext } from "src/hooks/useHeatmapContext";
+import { gradientStyle } from "./Legend.utils";
+import type { LegendType } from "./Legend.types";
 
 export type LegendProps = {
   children?: React.ReactNode | string;
-  domain?: number[];
   stepSize?: number;
-  scaleType?: "continuous" | "discrete";
+  scaleType?: LegendType;
   maxValueLabel?: string;
   minValueLabel?: string;
   height?: number;
-  colorScale?: (value: number) => string;
   formatter?: (value: number) => string;
 };
 
 function Legend({
-  domain = [0, 0],
   children = "",
   stepSize = 5,
   scaleType = "discrete",
   maxValueLabel = "",
   minValueLabel = "",
   height = undefined,
-  colorScale,
   formatter,
 }: LegendProps): JSX.Element {
-  const [minValue, maxValue] = [domain[0], domain[domain.length - 1]];
-  const numSteps = Math.floor((maxValue - minValue) / stepSize) + 1;
-  const legendValues = Array.from(
-    { length: numSteps },
-    (_, i) => minValue + i * stepSize
-  );
+  const { domain, maxValue: globalMaxValue, colorScale } = useHeatmapContext();
 
-  const gradientStyle = () => {
-    if (domain.length === 1) return { background: colorScale!(domain[0]) };
+  const normalizedDomain = domain ?? [0, globalMaxValue];
 
-    if (scaleType === "continuous" && domain.length > 1) {
-      const min = domain[0];
-      const max = domain[domain.length - 1];
-      const range = max - min;
+  const minValue = normalizedDomain[0];
+  const maxValue = normalizedDomain[normalizedDomain.length - 1];
 
-      const colorStops = domain.map((value) => {
-        const percent = ((value - min) / range) * 100;
-        return `${colorScale!(value)} ${percent}%`;
-      });
+  const numSteps = useMemo(() => {
+    return Math.floor((maxValue - minValue) / stepSize) + 1;
+  }, [minValue, maxValue, stepSize]);
 
-      return {
-        background: `linear-gradient(to top, ${colorStops.join(", ")})`,
-      };
-    }
-    return {};
-  };
+  const legendValues = useMemo(() => {
+    return Array.from({ length: numSteps }, (_, i) => minValue + i * stepSize);
+  }, [minValue, stepSize, numSteps]);
+
+  const isContinuous = scaleType === "continuous";
+  const isDiscrete = scaleType === "discrete";
+
   return (
     <div className={`react-topojson-heatmap__legend`}>
       <div className="content-wrapper">
@@ -57,7 +49,7 @@ function Legend({
         <div className="legend-header">{children}</div>
 
         {/* Handles discrete kind of legend */}
-        {scaleType === "discrete" && (
+        {isDiscrete && (
           <div className="discrete-legend">
             {legendValues.map((value, i) => (
               <div key={i} className="discrete-legend__item">
@@ -81,7 +73,7 @@ function Legend({
         )}
 
         {/* Handles continuous kind of legend */}
-        {scaleType === "continuous" && (
+        {isContinuous && (
           <div
             className="continuous-legend"
             style={{
@@ -100,7 +92,7 @@ function Legend({
                       {
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 2,
-                      }
+                      },
                     )}
               </span>
             </div>
@@ -108,7 +100,7 @@ function Legend({
             {/* Gradient bar */}
             <div
               className="continuous-legend_gradientbar"
-              style={gradientStyle()}
+              style={gradientStyle(normalizedDomain, scaleType, colorScale!)}
             />
 
             <div className="continuous-legend__labels">
@@ -130,13 +122,5 @@ function Legend({
     </div>
   );
 }
-
-Legend.getLegendProps = (legend: React.ReactNode): LegendProps | null => {
-  if (React.isValidElement(legend) && legend.type === Legend) {
-    const props = legend.props as LegendProps;
-    return props;
-  }
-  return null;
-};
 
 export default Legend;
