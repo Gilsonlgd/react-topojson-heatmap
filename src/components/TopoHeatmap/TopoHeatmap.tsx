@@ -154,6 +154,7 @@ function TopoHeatmap({
                     fill={colorScale(stateValue)}
                     id={`geo-${componentId}-${geoId}`}
                     data-tooltip-id={`tooltip-${componentId}`}
+                    data-region-id={geoId}
                     data-region-label-id={`region-label-${componentId}`}
                     onClick={() => {
                       if (onClick) onClick(geo);
