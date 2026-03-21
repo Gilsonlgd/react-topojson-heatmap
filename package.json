@@ -1,6 +1,6 @@
 {
   "name": "react-topojson-heatmap",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "A highly flexible React component for displaying heatmaps using TopoJSON data. Supports custom TopoJSON inputs, allowing users to visualize data distributions across any geographical region.",
   "main": "dist/react-topojson-heatmap.umd.js",
   "module": "dist/react-topojson-heatmap.es.js",
