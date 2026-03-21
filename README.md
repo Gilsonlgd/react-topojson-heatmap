@@ -27,6 +27,27 @@ Or with yarn:
 yarn add react-topojson-heatmap
 ```
 
+## Examples & Playground
+
+A complete example project demonstrating usage, customization, and integration with real topojson data is available here:
+
+👉 https://github.com/Gilsonlgd/react-topojson-heatmap-examples
+
+This repository includes:
+
+- Full working React setup
+- Integration with IBGE TopoJSON data
+- Custom tooltip, legend, and labels
+- Styling and customization examples
+
+It’s the best place to explore advanced usage and customization beyond the basic examples in this documentation.
+
+## ⚠️ Breaking Changes (v3.0)
+
+Version **3.0** introduces breaking changes and is **not backward compatible** with previous versions.
+
+If you're upgrading from v2.x, make sure to review the updated API and adjust your implementation accordingly.
+
 ## Input Data
 
 Here's a basic example of the data format used in the component:
@@ -73,7 +94,7 @@ The **IBGE Malhas API** can be used as an example source for TopoJSON data with 
   data={data}
   valueKey="indicator"
   topojson={topojson}
-  idPath="properties.codarea"
+  geoIdPath="properties.codarea"
   colorRange={["#90caff", "#2998ff"]}
 />
 ```
@@ -93,7 +114,7 @@ The `react-topojson-heatmap` component accepts the following props:
 | `data`        | `Data`                                 | An object containing data for each region. Each region should have a property specified by `valueKey` that will be used for coloring the heatmap. | NA |
 | `valueKey`   | `string`                               | The key inside each data item to be used as the value for coloring the heatmap.                  | `undefined`                                          |
 | `topojson`    | `Topology<TopoObj>`                    | The TopoJSON data used for rendering the geographical regions.                                  | NA                                                            |
-| `idPath?`     | `string`                               | The key used to identify each region in the TopoJSON data.                                      | `"id"`                                                        |
+| `geoIdPath?`     | `string`                               | The key used to identify each region in the TopoJSON data.                                      | `"id"`                                                        |
 | `colorRange?` | `string[]`                             | An array of colors that define the color range for the heatmap.                                 | `["#90caff", "#2998ff"]`                                      |
 | `domain?`     | `number[]`                             | An array containing the color interpolation steps for the color range.                          | `[0, maxValue]`, where `maxValue` is the max value extracted from `data`. |
 | `scale?`      | `number`                               | A scale factor to manually adjust the size of the rendered map.                                 | `1`                                                           |
@@ -167,7 +188,7 @@ function App() {
         valueKey="indicator" 
         topojson={topojson}
       >
-        <Tooltip
+        <TopoHeatmap.Tooltip
           float
           trigger="hover"
           tooltipContent={tooltipContent}
@@ -206,7 +227,7 @@ function App() {
         valueKey="indicator" 
         topojson={topojson}
       >
-        <Legend
+        <TopoHeatmap.Legend
           stepSize={10}
           formatter={value => {
             return `${value.toLocaleString()}%`;}
@@ -215,7 +236,7 @@ function App() {
           <strong>
             Public Schools Percentage
           </strong>
-        </Legend>
+        </TopoHeatmap.Legend>
       </TopoHeatmap>
     </div>
   );
@@ -237,10 +258,10 @@ Used to display a label inside a region, allowing customization of the content.
 Example Usage:
 ```javascript
 import React from 'react';
-import TopoHeatmap, { RegionLabel, DataItem } from 'react-topojson-heatmap';
+import TopoHeatmap, { RegionLabel } from 'react-topojson-heatmap';
 
 function App() {
-  const labelContent = (meta: DataItem): React.ReactNode => {
+  const labelContent = (meta: YourDataType): React.ReactNode => {
     return (
        <div className="d-flex container-fluid flex-column">
         <h3 className="fw-bold text-center text-white">{meta.name}</h3>
@@ -259,7 +280,7 @@ function App() {
         valueKey="indicator" 
         topojson={topojson}
       >
-        <RegionLabel
+        <TopoHeatmap.RegionLabel
           width={50}
           height={20}
           regionLabelContent={labelContent}
