@@ -147,48 +147,50 @@ function TopoHeatmap({
     componentId,
   };
   return (
-    <HeatmapContext.Provider value={context}>
-      <ComposableMap
-        style={{ width: "100%", height: "100%" }}
-        viewBox="0 0 600 600"
-        projection={projection as unknown as ProjectionFunction}
-      >
-        <Geographies geography={topojson} style={{ flexGrow: 1 }}>
-          {({ geographies }: { geographies: GeographyType[] }) => (
-            <MapContext.Provider value={{ geographies, projection }}>
-              {/**
-               * Handle region printing
-               */}
-              {geographies.map((geo) => {
-                const geoId = getProperty(geo, geoIdPath);
-                const geoData = data[geoId] || {};
-                const stateValue = extractValue(geoData);
-                return (
-                  <Geography
-                    key={`${componentId}_${geoId}`}
-                    className={`react-topojson-heatmap__state ${
-                      selectedGeos.includes(geo) ? "selected" : ""
-                    }`}
-                    geography={geo}
-                    fill={colorScale(stateValue)}
-                    id={`geo-${componentId}-${geoId}`}
-                    data-tooltip-id={`tooltip-${componentId}`}
-                    data-region-id={geoId}
-                    data-region-label-id={`region-label-${componentId}`}
-                    onClick={() => {
-                      if (onClick) onClick(geo);
-                      handleSelectGeo(geo);
-                    }}
-                  />
-                );
-              })}
-              {svgChildren}
-            </MapContext.Provider>
-          )}
-        </Geographies>
-      </ComposableMap>
-      {uiChildren}
-    </HeatmapContext.Provider>
+    <div className="react-topojson-heatmap">
+      <HeatmapContext.Provider value={context}>
+        <ComposableMap
+          style={{ width: "100%", height: "100%" }}
+          viewBox="0 0 600 600"
+          projection={projection as unknown as ProjectionFunction}
+        >
+          <Geographies geography={topojson} style={{ flexGrow: 1 }}>
+            {({ geographies }: { geographies: GeographyType[] }) => (
+              <MapContext.Provider value={{ geographies, projection }}>
+                {/**
+                 * Handle region printing
+                 */}
+                {geographies.map((geo) => {
+                  const geoId = getProperty(geo, geoIdPath);
+                  const geoData = data[geoId] || {};
+                  const stateValue = extractValue(geoData);
+                  return (
+                    <Geography
+                      key={`${componentId}_${geoId}`}
+                      className={`react-topojson-heatmap__state ${
+                        selectedGeos.includes(geo) ? "selected" : ""
+                      }`}
+                      geography={geo}
+                      fill={colorScale(stateValue)}
+                      id={`geo-${componentId}-${geoId}`}
+                      data-tooltip-id={`tooltip-${componentId}`}
+                      data-region-id={geoId}
+                      data-region-label-id={`region-label-${componentId}`}
+                      onClick={() => {
+                        if (onClick) onClick(geo);
+                        handleSelectGeo(geo);
+                      }}
+                    />
+                  );
+                })}
+                {svgChildren}
+              </MapContext.Provider>
+            )}
+          </Geographies>
+        </ComposableMap>
+        {uiChildren}
+      </HeatmapContext.Provider>
+    </div>
   );
 }
 
