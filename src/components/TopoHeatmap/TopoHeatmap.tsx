@@ -34,7 +34,7 @@ export interface TopoHeatmapProps {
   data: Data;
   topojson: Topology<TopoObj>;
   valueKey: string;
-  idPath?: string;
+  geoIdPath?: string;
   children?: React.ReactNode[] | React.ReactNode;
   colorRange?: string[];
   domain?: number[];
@@ -50,7 +50,7 @@ function TopoHeatmap({
   data,
   valueKey,
   topojson,
-  idPath = "id",
+  geoIdPath = "id",
   domain,
   colorRange = ["#90caff", "#2998ff"],
   scale = 1,
@@ -96,9 +96,9 @@ function TopoHeatmap({
 
   // Data format error handling
   useEffect(() => {
-    validateGeometriesHaveId(topojson, idPath);
-    validateDataKeys(topojson, data, idPath, valueKey);
-  }, [topojson, data, idPath, valueKey]);
+    validateGeometriesHaveId(topojson, geoIdPath);
+    validateDataKeys(topojson, data, geoIdPath, valueKey);
+  }, [topojson, data, geoIdPath, valueKey]);
 
   useEffect(() => {
     const geojson = feature(topojson, getObjectFirstProperty(topojson.objects));
@@ -134,7 +134,7 @@ function TopoHeatmap({
 
   const context = {
     data,
-    idPath,
+    geoIdPath,
     domain,
     colorScale,
     projection,
@@ -155,7 +155,7 @@ function TopoHeatmap({
                * Handle region printing
                */}
               {geographies.map((geo) => {
-                const geoId = getProperty(geo, idPath);
+                const geoId = getProperty(geo, geoIdPath);
                 const geoData = data[geoId] || {};
                 const stateValue = extractValue(geoData);
                 return (

@@ -20,7 +20,7 @@ function RegionLabel({
   height = 50,
   content,
 }: RegionLabelProps): JSX.Element {
-  const { idPath, componentId, data } = useHeatmapContext();
+  const { geoIdPath: idPath, componentId, data } = useHeatmapContext();
   const { geographies, projection } = useMapContext();
 
   return (

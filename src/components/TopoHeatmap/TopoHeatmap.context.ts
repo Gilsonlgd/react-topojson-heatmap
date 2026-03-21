@@ -7,7 +7,7 @@ export interface HeatmapContextValue {
   data: Data;
   maxValue: number;
   colorScale: ScaleLinear<string, string, never>;
-  idPath: string;
+  geoIdPath: string;
   componentId: string;
   domain?: number[];
 }
