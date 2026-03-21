@@ -28,6 +28,7 @@ import {
 import RegionLabel from "../RegionLabel/RegionLabel";
 
 import { HeatmapContext } from "./TopoHeatmap.context";
+import { MapContext } from "providers/MapContext";
 
 export interface TopoHeatmapProps {
   data: Data;
@@ -149,7 +150,7 @@ function TopoHeatmap({
       >
         <Geographies geography={topojson} style={{ flexGrow: 1 }}>
           {({ geographies }: { geographies: GeographyType[] }) => (
-            <>
+            <MapContext.Provider value={{ geographies, projection }}>
               {/**
                * Handle region printing
                */}
@@ -177,7 +178,7 @@ function TopoHeatmap({
                 );
               })}
               {svgChildren}
-            </>
+            </MapContext.Provider>
           )}
         </Geographies>
       </ComposableMap>

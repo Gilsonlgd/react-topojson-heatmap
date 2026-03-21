@@ -6,7 +6,7 @@ export function useMapContext() {
 
   if (!context) {
     throw new Error(
-      "TopoHeatmap map components must be used inside <TopoHeatmap>",
+      "TopoHeatmap map components must be used inside <Geographies> component of <TopoHeatmap>",
     );
   }
 
