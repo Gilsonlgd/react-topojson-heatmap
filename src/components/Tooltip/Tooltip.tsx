@@ -7,19 +7,19 @@ import type { DataItem } from "types";
 
 import { useHeatmapContext } from "hooks/useHeatmapContext";
 
-export type TooltipProps = {
+export type TooltipProps<T = DataItem> = {
   trigger?: "hover" | "click";
   float?: boolean;
   position?: PlacesType;
-  tooltipContent?: (meta: DataItem) => React.ReactNode;
+  tooltipContent?: (meta: T) => React.ReactNode;
 };
 
-function Tooltip({
+function Tooltip<T>({
   trigger = "hover",
   float = false,
   position = "top",
   tooltipContent,
-}: TooltipProps): JSX.Element {
+}: TooltipProps<T>): JSX.Element {
   const { componentId, data } = useHeatmapContext();
 
   const render = ({ activeAnchor }: { activeAnchor: HTMLElement | null }) => {

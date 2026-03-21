@@ -9,17 +9,19 @@ import { useMapContext } from "hooks/useMapContext";
 
 import { getProperty } from "utils/reactHandling";
 
-export type RegionLabelProps = {
+import { DataItem } from "types";
+
+export type RegionLabelProps<T = DataItem> = {
   width?: number;
   height?: number;
-  content?: (regionId: string | number, data?: any) => React.ReactNode;
+  content?: (regionId: string | number, data: T) => React.ReactNode;
 };
 
-function RegionLabel({
+function RegionLabel<T>({
   width = 75,
   height = 50,
   content,
-}: RegionLabelProps): JSX.Element {
+}: RegionLabelProps<T>): JSX.Element {
   const { geoIdPath: idPath, componentId, data } = useHeatmapContext();
   const { geographies, projection } = useMapContext();
 

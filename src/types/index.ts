@@ -7,9 +7,7 @@ export type Geography = {
   arcs?: any[];
 };
 
-export type DataItem = {
-  [key: string]: string | number;
-};
+export type DataItem = any;
 
 export type Data = {
   [key: string]: DataItem;
