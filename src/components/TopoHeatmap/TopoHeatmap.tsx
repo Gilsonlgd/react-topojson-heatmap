@@ -90,8 +90,13 @@ function TopoHeatmap({
 
   const dataValues = Object.keys(data).map((key) => extractValue(data[key]));
   const maxValue = Math.max(...dataValues);
+  const buildDomain = (min: number, max: number, steps: number) => {
+    const step = (max - min) / (steps - 1);
+    return Array.from({ length: steps }, (_, i) => min + step * i);
+  };
+  const domainValues = domain || buildDomain(0, maxValue, colorRange.length);
   const colorScale = scaleLinear<string>()
-    .domain(domain || [0, maxValue])
+    .domain(domainValues)
     .range(colorRange);
 
   // Data format error handling
