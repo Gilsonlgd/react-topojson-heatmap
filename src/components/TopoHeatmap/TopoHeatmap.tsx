@@ -144,8 +144,7 @@ function TopoHeatmap({
   return (
     <HeatmapContext.Provider value={context}>
       <ComposableMap
-        width={width}
-        height={height}
+        style={{ width: "100%", height: "100%" }}
         projection={projection as unknown as ProjectionFunction}
       >
         <Geographies geography={topojson} style={{ flexGrow: 1 }}>
