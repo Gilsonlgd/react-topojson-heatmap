@@ -36,7 +36,12 @@ function Legend({
   }, [minValue, maxValue, stepSize]);
 
   const legendValues = useMemo(() => {
+    if (scaleType === "discrete") {
     return Array.from({ length: numSteps }, (_, i) => minValue + i * stepSize);
+    }
+    
+    // For continuous, we can just return the min and max values
+    return [minValue, maxValue];
   }, [minValue, stepSize, numSteps]);
 
   const isContinuous = scaleType === "continuous";
