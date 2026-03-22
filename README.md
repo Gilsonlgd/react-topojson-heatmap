@@ -29,11 +29,17 @@ yarn add react-topojson-heatmap
 
 ## Examples & Playground
 
-A complete example project demonstrating usage, customization, and integration with real topojson data is available here:
+A complete example project demonstrating usage, customization, and integration with real TopoJSON data is available here:
 
-👉 https://github.com/Gilsonlgd/react-topojson-heatmap-examples
+### 🔗 GitHub Repository
+👉 https://github.com/Gilsonlgd/react-topojson-heatmap-examples  
 
-This repository includes:
+### ⚡ Live Playground (StackBlitz)
+👉 https://stackblitz.com/github/Gilsonlgd/react-topojson-heatmap-examples?file=README.md  
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/Gilsonlgd/react-topojson-heatmap-examples?file=README.md)
+
+This project includes:
 
 - Full working React setup
 - Integration with IBGE TopoJSON data
